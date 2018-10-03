@@ -128,12 +128,16 @@ namespace RoomReservationCore.Controllers
             return result;
         }
 
-        [Route("{roomId}/{date}")]
-        public IEnumerable<Reservation> GetReservationsByRoomAndDate(string idString, string dateString)
+        // Todo not working, parameter '@dateString', which was not supplied?
+        [Route("room/{roomId}/date/{date}")]
+        public IEnumerable<Reservation> GetReservationsByRoomAndDate(int roomId, string date)
         {
-            const string selectReservations =
-                "select * from roomreservationReservation where roomid=@roomId and convert(date, @dateString) between cast(fromTime as date) and cast(toTime as date) order by fromTime";
-            int idInt = int.Parse(idString);
+            string selectReservations =
+                //   "select * from roomreservationReservation where roomid=@roomId";
+                "select * from roomreservationReservation where roomid=@roomId and thedate=@dateString";
+            // "select * from roomreservationReservation where roomid=@roomId and thedate = convert(date, '"+ date + "')";
+            // "select * from roomreservationReservation where roomid=@roomId and convert(date, @dateString) between cast(fromTime as date) and cast(toTime as date) order by fromTime";
+
             //IFormatProvider formatProvider = null;
             //DateTime dateTime = DateTime.ParseExact(dateString, "dd-MM-yyyy", formatProvider);
             //throw new NotImplementedException();
@@ -143,8 +147,8 @@ namespace RoomReservationCore.Controllers
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(selectReservations, connection))
                 {
-                    command.Parameters.AddWithValue("@roomId", idInt);
-                    command.Parameters.AddWithValue("@dateString", dateString);
+                    command.Parameters.AddWithValue("@roomId", roomId);
+                    command.Parameters.AddWithValue("@dateString", date);
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.HasRows)
