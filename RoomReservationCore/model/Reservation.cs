@@ -6,6 +6,8 @@
         //public DateTime FromTime { get; set; }
         //public DateTime ToTime { get; set; }
 
+        // public string DateString { get; set; }
+
         public string FromTimeString { get; set; }
 
         public string ToTimeString { get; set; }

@@ -51,11 +51,18 @@ namespace RoomReservationCore.Controllers
             //DateTime to = reader.GetDateTime(4);
             string purpose = reader.IsDBNull(5) ? null : reader.GetString(5);
             // string deviceId = reader.IsDBNull(6) ? null : reader.GetString(6);
+            // DateTime reservationDate = reader.GetDateTime(6);
+            // String from2 = reader.GetString(7); // TODO time shit!
+            // Time has no typed access method
+            // https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql-server-data-type-mappings
+            //DateTime to2 = reader.GetDateTime(8);
+
             return new Reservation
             {
                 Id = id,
                 RoomId = roomId,
                 UserId = userId,
+                //DateString = reservationDate.ToString("dd-MM-yyy"),
                 FromTimeString = from.ToString("dd-MM-yyyy H:mm"),
                 ToTimeString = to.ToString("dd-MM-yyyy H:mm"),
                 Purpose = purpose,
@@ -134,7 +141,7 @@ namespace RoomReservationCore.Controllers
         {
             string selectReservations =
                 //   "select * from roomreservationReservation where roomid=@roomId";
-                "select * from roomreservationReservation where roomid=@roomId and thedate=@dateString";
+                "select * from roomreservationReservation where roomid=@roomId and cast(@dateSTring as date) between cast(fromTime as date) and cast(toTime as date)";
             // "select * from roomreservationReservation where roomid=@roomId and thedate = convert(date, '"+ date + "')";
             // "select * from roomreservationReservation where roomid=@roomId and convert(date, @dateString) between cast(fromTime as date) and cast(toTime as date) order by fromTime";
 
